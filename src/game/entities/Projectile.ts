@@ -1,10 +1,8 @@
 import Phaser from 'phaser';
-import { consumeSingleHit } from '../../gameplay/weapons/WeaponMath';
 
 export class Projectile extends Phaser.Physics.Arcade.Image {
   readonly damage: number;
   private expiresAt: number;
-  private hitAvailable = true;
 
   constructor(
     scene: Phaser.Scene,
@@ -29,12 +27,6 @@ export class Projectile extends Phaser.Physics.Arcade.Image {
     const localDiameter = 10 / Math.abs(this.scaleX);
     this.setCircle(localDiameter / 2, (frameWidth - localDiameter) / 2, (frameWidth - localDiameter) / 2);
     this.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
-  }
-
-  tryConsumeHit(): boolean {
-    const result = consumeSingleHit(this.hitAvailable);
-    this.hitAvailable = result.active;
-    return result.accepted;
   }
 
   updateLifetime(nowMs: number): void {
