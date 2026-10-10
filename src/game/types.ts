@@ -4,11 +4,15 @@ export interface Vector2Like {
 }
 
 export interface PlayerInput {
+  sequence: number;
+  clientTick: number;
   moveX: number;
   moveY: number;
   aimX: number;
   aimY: number;
   fire: boolean;
+  ability: boolean;
+  interact: boolean;
 }
 
 export enum GamePhase {

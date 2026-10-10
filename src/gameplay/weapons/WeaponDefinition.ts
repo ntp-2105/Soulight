@@ -6,7 +6,8 @@ export interface WeaponDefinition {
   name: string;
   kind: WeaponKind;
   damage: number;
-  cooldownMs: number;
+  fireIntervalMs: number;
+  energyCost: number;
   projectileCount: number;
   projectileSpeed: number;
   projectileLifetimeMs: number;

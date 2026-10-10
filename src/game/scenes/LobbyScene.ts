@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { ACTOR_FRAMES, ASSET_KEYS, DUNGEON_FRAMES, GAME_FONT, PROMPT_FRAMES } from '../../data/assets';
+import { NetworkSession } from '../../network/NetworkSession';
 
 export class LobbyScene extends Phaser.Scene {
   private started = false;
@@ -28,22 +29,24 @@ export class LobbyScene extends Phaser.Scene {
       letterSpacing: 3,
     }).setOrigin(0.5).setDepth(3);
 
-    const button = this.add.nineslice(640, 382, ASSET_KEYS.PANEL_INLAY, undefined, 330, 72, 14, 14, 14, 14)
-      .setInteractive({ useHandCursor: true })
-      .setDepth(3);
-    const buttonLabel = this.add.text(640, 382, 'ENTER THE ARENA', {
-      fontFamily: GAME_FONT,
-      fontSize: '24px',
-      color: '#fff0bd',
-      stroke: '#3a2418',
-      strokeThickness: 5,
-    }).setOrigin(0.5).setDepth(4);
-    button.on('pointerover', () => { button.setTint(0xf3cf81); buttonLabel.setScale(1.04); });
-    button.on('pointerout', () => { button.clearTint(); buttonLabel.setScale(1); });
-    button.on('pointerdown', () => this.startGame());
+    this.addButton(640, 352, 'ENTER THE ARENA', () => this.startGame());
+    const roomId = new URLSearchParams(location.search).get('room');
+    const onlineLabel = this.addButton(640, 420, roomId ? `JOIN ROOM ${roomId.toUpperCase()}` : 'HOST ONLINE ROOM', () => {
+      if (this.started) return;
+      this.started = true;
+      onlineLabel.setText('CONNECTING...');
+      NetworkSession.connect(roomId).then((session) => {
+        // The URL is the invite link: share it to let others join the room.
+        history.replaceState(null, '', `?room=${session.roomId}`);
+        this.startGame({ session });
+      }).catch((error: Error) => {
+        this.started = false;
+        onlineLabel.setText(error.message.replaceAll('_', ' ').toUpperCase());
+      });
+    });
 
     this.addPromptRow();
-    this.add.text(640, 565, 'PRESS ENTER TO BEGIN', {
+    this.add.text(640, 570, 'PRESS ENTER TO PLAY OFFLINE', {
       fontFamily: GAME_FONT,
       fontSize: '14px',
       color: '#987b58',
@@ -52,11 +55,28 @@ export class LobbyScene extends Phaser.Scene {
     this.input.keyboard?.once('keydown-ENTER', () => this.startGame());
   }
 
-  private startGame(): void {
-    if (this.started) return;
+  private startGame(data?: { session: NetworkSession }): void {
+    if (this.started && !data) return;
     this.started = true;
     this.cameras.main.fadeOut(220, 20, 12, 8);
-    this.time.delayedCall(230, () => this.scene.start('DungeonScene'));
+    this.time.delayedCall(230, () => this.scene.start('DungeonScene', data));
+  }
+
+  private addButton(x: number, y: number, text: string, onClick: () => void): Phaser.GameObjects.Text {
+    const button = this.add.nineslice(x, y, ASSET_KEYS.PANEL_INLAY, undefined, 330, 56, 14, 14, 14, 14)
+      .setInteractive({ useHandCursor: true })
+      .setDepth(3);
+    const label = this.add.text(x, y, text, {
+      fontFamily: GAME_FONT,
+      fontSize: '22px',
+      color: '#fff0bd',
+      stroke: '#3a2418',
+      strokeThickness: 5,
+    }).setOrigin(0.5).setDepth(4);
+    button.on('pointerover', () => { button.setTint(0xf3cf81); label.setScale(1.04); });
+    button.on('pointerout', () => { button.clearTint(); label.setScale(1); });
+    button.on('pointerdown', onClick);
+    return label;
   }
 
   private drawBackdrop(): void {
@@ -76,13 +96,15 @@ export class LobbyScene extends Phaser.Scene {
   private addPromptRow(): void {
     const keyFrames = [PROMPT_FRAMES.W, PROMPT_FRAMES.A, PROMPT_FRAMES.S, PROMPT_FRAMES.D];
     keyFrames.forEach((frame, index) => {
-      this.add.image(438 + index * 27, 492, ASSET_KEYS.PROMPTS, frame).setDisplaySize(24, 24).setDepth(4);
+      this.add.image(438 + index * 27, 522, ASSET_KEYS.PROMPTS, frame).setDisplaySize(24, 24).setDepth(4);
     });
-    this.add.text(548, 492, 'MOVE', { fontFamily: GAME_FONT, fontSize: '14px', color: '#d5bd95' }).setOrigin(0, 0.5).setDepth(4);
-    this.add.image(646, 492, ASSET_KEYS.PROMPTS, PROMPT_FRAMES.MOUSE_LEFT).setDisplaySize(24, 24).setDepth(4);
-    this.add.text(666, 492, 'AIM / ATTACK', { fontFamily: GAME_FONT, fontSize: '14px', color: '#d5bd95' }).setOrigin(0, 0.5).setDepth(4);
+    this.add.text(548, 522, 'MOVE / AIM', { fontFamily: GAME_FONT, fontSize: '14px', color: '#d5bd95' }).setOrigin(0, 0.5).setDepth(4);
+    PROMPT_FRAMES.SPACE.forEach((frame, index) => {
+      this.add.image(662 + index * 24, 522, ASSET_KEYS.PROMPTS, frame).setDisplaySize(24, 24).setDepth(4);
+    });
+    this.add.text(732, 522, 'ATTACK', { fontFamily: GAME_FONT, fontSize: '14px', color: '#d5bd95' }).setOrigin(0, 0.5).setDepth(4);
     [PROMPT_FRAMES.ONE, PROMPT_FRAMES.TWO, PROMPT_FRAMES.THREE].forEach((frame, index) => {
-      this.add.image(820 + index * 27, 492, ASSET_KEYS.PROMPTS, frame).setDisplaySize(24, 24).setDepth(4);
+      this.add.image(820 + index * 27, 522, ASSET_KEYS.PROMPTS, frame).setDisplaySize(24, 24).setDepth(4);
     });
   }
 }

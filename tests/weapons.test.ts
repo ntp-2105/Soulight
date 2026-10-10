@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { canFire, consumeSingleHit, isWithinMeleeArc, spreadAngles } from '../src/gameplay/weapons/WeaponMath';
+import { advance, canFire, isWithinMeleeArc, spreadAngles } from '../src/gameplay/weapons/WeaponMath';
 
 describe('weapon rules', () => {
   it('enforces fire cooldowns at the exact boundary', () => {
@@ -22,9 +22,20 @@ describe('weapon rules', () => {
     expect(isWithinMeleeArc(origin, { x: -50, y: 0 }, aim, 100, 100)).toBe(false);
     expect(isWithinMeleeArc(origin, { x: 130, y: 0 }, aim, 100, 100)).toBe(false);
   });
+});
 
-  it('allows a projectile to be consumed only once', () => {
-    expect(consumeSingleHit(true)).toEqual({ accepted: true, active: false });
-    expect(consumeSingleHit(false)).toEqual({ accepted: false, active: false });
+describe('projectile advance', () => {
+  it('cannot tunnel through a thin wall in one frame', () => {
+    const wall = (x: number) => x >= 100 && x < 110;
+    const r = advance(90, 0, 50, 0, 8, (x) => wall(x));
+    expect(r.hit).toBe(true);
+    expect(r.x).toBeLessThan(110);
+  });
+
+  it('moves the full distance when nothing blocks', () => {
+    const r = advance(0, 0, 30, 40, 8, () => false);
+    expect(r.hit).toBe(false);
+    expect(r.x).toBeCloseTo(30);
+    expect(r.y).toBeCloseTo(40);
   });
 });

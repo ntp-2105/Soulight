@@ -4,10 +4,14 @@ import { ACTOR_FRAMES, ASSET_KEYS } from '../../data/assets';
 import { applyDamage, type Damageable } from './Damageable';
 import type { Player } from './Player';
 
+const KNOCKBACK_SPEED = 320; // px/s, tune to taste
+const KNOCKBACK_MS = 120;
+
 export class ChaserEnemy extends Phaser.Physics.Arcade.Image implements Damageable {
   readonly maxHealth = ENEMY_BALANCE.maxHealth;
   health: number = this.maxHealth;
   nextContactDamageAt = 0;
+  private knockbackUntil = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, ASSET_KEYS.ACTORS, ACTOR_FRAMES.ENEMY);
@@ -18,8 +22,17 @@ export class ChaserEnemy extends Phaser.Physics.Arcade.Image implements Damageab
     this.setCircle(6, 2, 2);
   }
 
-  chase(player: Player): void {
+  knockback(fromX: number, fromY: number, nowMs: number): void {
     if (!this.active) return;
+    const away = new Phaser.Math.Vector2(this.x - fromX, this.y - fromY);
+    if (away.lengthSq() < 1) return;
+    away.normalize().scale(KNOCKBACK_SPEED);
+    this.setVelocity(away.x, away.y);
+    this.knockbackUntil = nowMs + KNOCKBACK_MS;
+  }
+
+  chase(player: Player): void {
+    if (!this.active || this.scene.time.now < this.knockbackUntil) return;
     const direction = new Phaser.Math.Vector2(player.x - this.x, player.y - this.y);
     if (direction.lengthSq() < 1) {
       this.setVelocity(0, 0);

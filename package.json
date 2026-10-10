@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
+    "server": "dotnet run --project server/Soulight.Server",
+    "server:test": "dotnet test server/Soulight.Server.Tests",
     "check": "npm run typecheck && npm test && npm run build"
   },
   "dependencies": {

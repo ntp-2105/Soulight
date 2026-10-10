@@ -73,7 +73,7 @@ export const PROMPT_FRAMES = {
   S: 121,
   D: 122,
   R: 89,
-  MOUSE_LEFT: 569,
+  SPACE: [235, 236, 237],
 } as const;
 
 export const ASSET_SOURCES = {
@@ -93,11 +93,11 @@ export const ASSET_MANIFEST: readonly AssetDefinition[] = [
   { key: ASSET_KEYS.ACTORS, url: 'assets/world/tiny-dungeon.png', kind: 'spritesheet', frameWidth: 16, frameHeight: 16, sourceId: 'tinyDungeon', purpose: 'Player, enemy, torches, and weapon sprites' },
   { key: ASSET_KEYS.DUNGEON, url: 'assets/world/dungeon.png', kind: 'spritesheet', frameWidth: 16, frameHeight: 16, spacing: 1, sourceId: 'caves', purpose: 'Dungeon floor, walls, and decorations' },
   { key: ASSET_KEYS.RPG, url: 'assets/world/roguelike-rpg.png', kind: 'spritesheet', frameWidth: 16, frameHeight: 16, spacing: 1, sourceId: 'rpg', purpose: 'Fantasy environment and item library' },
-  { key: ASSET_KEYS.PROMPTS, url: 'assets/ui/input-prompts.png', kind: 'spritesheet', frameWidth: 16, frameHeight: 16, sourceId: 'prompts', purpose: 'Keyboard and mouse control prompts' },
+  { key: ASSET_KEYS.PROMPTS, url: 'assets/ui/input-prompts.png', kind: 'spritesheet', frameWidth: 16, frameHeight: 16, sourceId: 'prompts', purpose: 'Keyboard control prompts' },
   { key: ASSET_KEYS.PANEL, url: 'assets/ui/panel.png', kind: 'image', sourceId: 'pixelUi', purpose: 'Fantasy UI panels and buttons' },
   { key: ASSET_KEYS.PANEL_INLAY, url: 'assets/ui/panel-inlay.png', kind: 'image', sourceId: 'pixelUi', purpose: 'Inset meters and UI surfaces' },
   { key: ASSET_KEYS.BUTTON_PRESSED, url: 'assets/ui/button-pressed.png', kind: 'image', sourceId: 'pixelUi', purpose: 'Pressed button state' },
-  { key: ASSET_KEYS.CROSSHAIR, url: 'assets/ui/crosshair.png', kind: 'image', sourceId: 'crosshair', purpose: 'Mouse aim crosshair' },
+  { key: ASSET_KEYS.CROSSHAIR, url: 'assets/ui/crosshair.png', kind: 'image', sourceId: 'crosshair', purpose: 'Aim crosshair' },
   { key: ASSET_KEYS.MAGIC, url: 'assets/vfx/magic.png', kind: 'image', sourceId: 'particles', purpose: 'Wand bolts and magic flashes' },
   { key: ASSET_KEYS.EMBER, url: 'assets/vfx/ember.png', kind: 'image', sourceId: 'particles', purpose: 'Staff projectiles and flame effects' },
   { key: ASSET_KEYS.SPARK, url: 'assets/vfx/spark.png', kind: 'image', sourceId: 'particles', purpose: 'Combat impacts' },

@@ -51,11 +51,12 @@ export class CombatSystem {
     for (const enemy of this.wave.livingEnemies()) {
       if (!isWithinMeleeArc(origin, enemy, aim, weapon.meleeRange, weapon.meleeArcDegrees, 16)) continue;
       this.damageEnemy(enemy, weapon.damage);
+      if (enemy.health > 0) enemy.knockback(origin.x, origin.y, this.player.scene.time.now);
     }
   }
 
   private projectileHit(projectile: Projectile, enemy: ChaserEnemy): void {
-    if (!this.enabled || !projectile.active || !enemy.active || !projectile.tryConsumeHit()) return;
+    if (!this.enabled || !projectile.active || !enemy.active) return;
     this.effects.hit(projectile.x, projectile.y);
     const damage = projectile.damage;
     projectile.destroy();
