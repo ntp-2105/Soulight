@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://djkou8h22eiqv"]
+
+[ext_resource type="Script" uid="uid://d1aq5pjpfdex" path="res://scripts/player.gd" id="1_dovo2"]
+[ext_resource type="Texture2D" path="res://assets/soldier/Soldier_Idle.png" id="1_idle"]
+[ext_resource type="Texture2D" path="res://assets/soldier/Soldier_Walk.png" id="2_walk"]
+
+[sub_resource type="AtlasTexture" id="Atlas_idle0"]
+atlas = ExtResource("1_idle")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle1"]
+atlas = ExtResource("1_idle")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle2"]
+atlas = ExtResource("1_idle")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle3"]
+atlas = ExtResource("1_idle")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle4"]
+atlas = ExtResource("1_idle")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle5"]
+atlas = ExtResource("1_idle")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_walk0"]
+atlas = ExtResource("2_walk")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_walk1"]
+atlas = ExtResource("2_walk")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_walk2"]
+atlas = ExtResource("2_walk")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_walk3"]
+atlas = ExtResource("2_walk")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_walk4"]
+atlas = ExtResource("2_walk")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_walk5"]
+atlas = ExtResource("2_walk")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_walk6"]
+atlas = ExtResource("2_walk")
+region = Rect2(600, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="Atlas_walk7"]
+atlas = ExtResource("2_walk")
+region = Rect2(700, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_soldier"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_idle0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_idle1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_idle2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_idle3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_idle4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_idle5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_walk0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_walk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_walk2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_walk3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_walk4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_walk5")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_walk6")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_walk7")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_guakt"]
+radius = 18.0
+
+[node name="Player" type="CharacterBody2D" unique_id=1308499287]
+script = ExtResource("1_dovo2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_soldier")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1944468227]
+shape = SubResource("CircleShape2D_guakt")
