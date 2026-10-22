@@ -1,8 +1,0 @@
-node_modules/
-dist/
-*.tsbuildinfo
-.vite/
-.DS_Store
-Thumbs.db
-bin/
-obj/
